@@ -73,7 +73,7 @@ The main difference is [monolite](https://github.com/kube/monolite) is using es6
 
 `hydux-mutator` is implement by parsing lambda function's source string(`fn.toString()`), this have better browser support. And the parsing part can easily be cached, which means it can have better performance.
 
-What's more, this support class state, which I merely see in other immuatble update helpers.
+What's more, `hydux-mutator` support class state, which I merely see in other immuatble update helpers.
 
 ```js
 import * as mutator from 'hydux-mutator'
@@ -93,7 +93,7 @@ state.user instanceof User // true!
 
 ## Known Issues
 
-* flow has bug in checking `setIn`, see: [5569](https://github.com/facebook/flow/issues/5569)
+* flow has bug in checking `setIn`, see: [#5569](https://github.com/facebook/flow/issues/5569)
 
 ## Benchmark
 

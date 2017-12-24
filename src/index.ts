@@ -1,6 +1,6 @@
 import QuickLRU, { assign } from './quicklru'
 let cache = new QuickLRU({ maxSize: 50 })
-const funRe = /(?:return|[\w$]+\s*\=\>)\s+[\w$]+(.*)\s*(?:;|$)/
+const funRe = /(?:return|[\w$]+\s*\=\>)\s+[\w$]+(.*)\s*(?:;|}|$)/
 
 export function setCacheSize(maxSize = 50) {
   cache = new QuickLRU({ maxSize })
