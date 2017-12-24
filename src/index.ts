@@ -1,6 +1,4 @@
-import 'core-js/es6/map'
-import 'core-js/fn/object/assign'
-import QuickLRU from './quicklru'
+import QuickLRU, { assign } from './quicklru'
 let cache = new QuickLRU({ maxSize: 50 })
 const funRe = /(?:return|[\w$]+\s*\=\>)\s+[\w$]+(.*)\s*(?:;|$)/
 
@@ -65,14 +63,14 @@ function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: Mut
       ? lambda2path(accessor)
       : accessor
   let newRecord = new (record as any).constructor()
-  Object.assign(newRecord, record)
+  assign(newRecord, record)
   let dist = newRecord
   let src = record
   for (let i = 0; i < keys.length - 1; i++) {
     const key = keys[i]
     src = src[key]
     dist = dist[key] = new (src as any).constructor()
-    Object.assign(dist, src)
+    assign(dist, src)
   }
   let lastKey = keys[keys.length - 1]
   dist[lastKey] =

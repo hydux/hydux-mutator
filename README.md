@@ -91,6 +91,10 @@ state = mutator.setIn(state, _ => _.user.name, 'New Name')
 state.user instanceof User // true!
 ```
 
+## Known Issues
+
+* flow has bug in checking `setIn`, see: [5569](https://github.com/facebook/flow/issues/5569)
+
 ## Benchmark
 
 ```sh

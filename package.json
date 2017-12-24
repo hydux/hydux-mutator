@@ -33,7 +33,6 @@
   },
   "homepage": "https://github.com/hydux/hydux#readme",
   "devDependencies": {
-    "@types/core-js": "^0.9.43",
     "@types/mocha": "^2.2.44",
     "@types/node": "^8.0.56",
     "awesome-typescript-loader": "^3.4.1",
@@ -61,7 +60,6 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
-    "core-js": "^2.5.3",
     "picodom": "^1.0.2",
     "quick-lru": "^1.1.0",
     "ts-lib": "^0.0.5",

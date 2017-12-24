@@ -2,10 +2,6 @@
 # yarn lockfile v1
 
 
-"@types/core-js@^0.9.43":
-  version "0.9.43"
-  resolved "http://registry.npm.taobao.org/@types/core-js/download/@types/core-js-0.9.43.tgz#65d646c5e8c0cd1bdee37065799f9d3d48748253"
-
 "@types/fs-extra@4.0.0":
   version "4.0.0"
   resolved "http://registry.npm.taobao.org/@types/fs-extra/download/@types/fs-extra-4.0.0.tgz#1dd742ad5c9bce308f7a52d02ebc01421bc9102f"
@@ -717,7 +713,7 @@ core-js@^2.0.0:
   version "2.5.1"
   resolved "http://registry.npm.taobao.org/core-js/download/core-js-2.5.1.tgz#ae6874dc66937789b80754ff5428df66819ca50b"
 
-core-js@^2.4.0, core-js@^2.5.3:
+core-js@^2.4.0:
   version "2.5.3"
   resolved "http://registry.npm.taobao.org/core-js/download/core-js-2.5.3.tgz#8acc38345824f16d8365b7c9b4259168e8ed603e"
 

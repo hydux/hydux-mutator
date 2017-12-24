@@ -1,7 +1,8 @@
+export declare function assign(obj1: any, obj2: any): any;
 export default class QuickLRU {
     maxSize: number;
-    cache: Map<any, any>;
-    oldCache: Map<any, any>;
+    cache: {};
+    oldCache: {};
     _size: number;
     constructor(opts: any);
     _set(key: any, value: any): void;
