@@ -51,7 +51,6 @@
     "pre-commit": "^1.2.2",
     "seamless-immutable": "^7.1.2",
     "source-map-loader": "^0.2.3",
-    "timekeeper": "^2.0.0",
     "timm": "^1.4.0",
     "tslint": "^5.8.0",
     "tslint-config-standard": "^7.0.0",
@@ -60,12 +59,8 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
-    "picodom": "^1.0.2",
     "quick-lru": "^1.1.0",
-    "ts-lib": "^0.0.5",
     "tslib": "^1.8.1"
   },
-  "optionalDependencies": {
-    "remotedev": "^0.2.7"
-  }
+  "optionalDependencies": {}
 }
