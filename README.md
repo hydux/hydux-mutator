@@ -17,7 +17,7 @@ A statically-typed immutable update helper library.
 yarn add hydux-mutator # or npm i hydux-mutator
 ```
 
-[docs/media.gif]
+![](https://github.com/hydux/hydux-mutator/raw/master/docs/media.gif)
 
 ## Usage
 
@@ -67,11 +67,11 @@ state = updateIn(state, _ => _.userObjMap, m => ({
 }))
 ```
 
-## What's the difference of this and `monolite`
+## What's the difference with `monolite`
 
-The main difference is monolite is using es6's `Proxy<T>` under the hood, which might not support well in many browsers.
+The main difference is [monolite](https://github.com/kube/monolite) is using es6's `Proxy<T>` under the hood, which might not support well in many browsers.
 
-`hydux-mutator` is implement by parsing lambda function's source string(`fn.toString()`), this have better browser support. And the parsing part can easily be cached, which means it can have good performance.
+`hydux-mutator` is implement by parsing lambda function's source string(`fn.toString()`), this have better browser support. And the parsing part can easily be cached, which means it can have better performance.
 
 What's more, this support class state, which I merely see in other immuatble update helpers.
 
