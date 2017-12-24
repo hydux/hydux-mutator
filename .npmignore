@@ -1,0 +1,7 @@
+docs
+lib/benchmark
+src/benchmark
+src/test
+test-flow.js
+tsconfig.2015.json
+tslint.json

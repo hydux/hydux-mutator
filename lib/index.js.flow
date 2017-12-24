@@ -1,0 +1,8 @@
+// @flow
+
+declare export var setIn: <T, V>(record: T, accessor: ((obj: T) => V) | string[], value: V) => T
+
+
+declare export var updateIn: <T, V>(record: T, accessor: ((obj: T) => V) | string[], updator?: (v: V) => V) => T
+
+declare export default { setIn: typeof setIn, updateIn: typeof updateIn }
