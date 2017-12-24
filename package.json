@@ -1,6 +1,6 @@
 {
   "name": "hydux-mutator",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "An statically-typed immutable update helper library, built for hydux.",
   "main": "./lib/index.js",
   "typings": "./lib/index",
