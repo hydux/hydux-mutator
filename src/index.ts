@@ -6,13 +6,6 @@ export function setCacheSize(maxSize = 50) {
   cache = new QuickLRU({ maxSize })
 }
 
-function getByKeys (record, keys) {
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
-    record = record[key]
-  }
-  return record
-}
 const isQuote = s => s === '"' || s === '\''
 function lambda2path(accessor: Function) {
   let setter = accessor.toString()
