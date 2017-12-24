@@ -9,12 +9,7 @@ const DIST = `${__dirname}/static/dist`
 
 module.exports = module.exports = {
   entry: {
-    core: "./src/index.ts",
-    picodom: './src/enhancers/picodom-render.ts',
-    logger: './src/enhancers/logger.ts',
-    persist: './src/enhancers/persist.ts',
-    hmr: './src/enhancers/hmr.ts',
-    devtools: './src/enhancers/devtools.ts',
+    mutator: "./src/index.ts",
   },
   output: {
       filename: "hydux.[name].js",
