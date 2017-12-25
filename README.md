@@ -73,7 +73,7 @@ The main difference is [monolite](https://github.com/kube/monolite) is using es6
 
 `hydux-mutator` is implement by parsing lambda function's source string(`fn.toString()`), this have better browser support. And the parsing part can easily be cached, which means it can have better performance.
 
-What's more, `hydux-mutator` support class state, which I merely see in other immuatble update helpers.
+What's more, `hydux-mutator` support class state, which I rarely see in other immuatble update helpers.
 
 ```js
 import * as mutator from 'hydux-mutator'
