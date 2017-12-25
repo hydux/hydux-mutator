@@ -74,7 +74,7 @@ function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: Mut
 }
 
 export function setIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], value?: V): T {
-  if (!value) {
+  if (value === void 0) {
     return record
   }
   return mutate(record, accessor, MutateType.setIn, value)

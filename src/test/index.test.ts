@@ -23,7 +23,7 @@ const originalBook = {
 const book = {
   title: {
     zh: '哈利·波特与魔法石',
-    en: 'Harry Potter and the Philosopher\'s Stone',
+    en: ('Harry Potter and the Philosopher\'s Stone' as (null | string)),
   },
   category: new Category(),
   author: 'J. k. rowling',
@@ -83,6 +83,15 @@ describe('setIn', () => {
     assert(newBook.tags !== book.tags)
     assert(newBook.title === book.title)
     assert(newBook.category instanceof Category)
+  })
+
+  it('delete', () => {
+    const newBook = mutator.setIn(book, _ => _.title.en, null)
+    assert(newBook.title.en === null)
+    assert(newBook.title.zh === book.title.zh)
+    assert(newBook.title !== book.title)
+    assert(newBook !== book)
+    assert(newBook.category === book.category)
   })
 })
 
