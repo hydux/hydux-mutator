@@ -18,10 +18,10 @@ function clone(obj) {
   }
   const newObj = new obj.constructor()
   const keys = Object.keys(obj)
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      newObj[key] = obj[key]
-    }
+  let len = keys.length
+  while (len--) {
+    const key = keys[len]
+    newObj[key] = obj[key]
   }
   return newObj
 }
