@@ -1,4 +1,3 @@
-export declare function assign(obj1: any, obj2: any): any;
 export default class QuickLRU {
     maxSize: number;
     cache: {};

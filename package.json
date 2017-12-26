@@ -8,7 +8,7 @@
   "scripts": {
     "build": "del lib && tsc -d -t es5 && cp ./index.js.flow ./lib",
     "build:dist": "webpack -p --progress --profile",
-    "test": "mocha --require espower-typescript/guess \"src/test/**/*.ts\"",
+    "test": "mocha --require espower-typescript/guess \"src/test/**/*.ts\" \"lib/test/**/*.js\"",
     "test:watch": "npm run test -- -w --watch-extensions ts,tsx",
     "doc": "typedoc --theme minimal --out ./docs --exclude ./test ./src && touch ./docs/.nojekyll",
     "preversion": "npm run test && npm run build && npm run build:dist && git add -A",

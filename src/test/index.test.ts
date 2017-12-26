@@ -8,6 +8,15 @@ function sleep(ns) {
 class Category {
   name = 'novel'
   count = 123
+  get count2 () {
+    return this.count
+  }
+  set count3(val) {
+    this.count = val
+  }
+  count4() {
+    return this.count
+  }
 }
 const originalBook = {
   title: {
@@ -59,6 +68,11 @@ describe('setIn', () => {
     assert(newBook !== book)
     assert(newBook.category !== book.category)
     assert(newBook.title === book.title)
+    assert(newBook.category.count2 === book.category.count2)
+    newBook.category.count3 = 10
+    assert(newBook.category.count === 10)
+    assert(book.category.count === originalBook.category.count)
+    assert(newBook.category.count4() === newBook.category.count)
     assert(newBook.category instanceof Category)
   })
 

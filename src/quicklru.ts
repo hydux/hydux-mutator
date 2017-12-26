@@ -1,20 +1,13 @@
 // MIT © Sindre Sorhus
 // Fork from https://github.com/sindresorhus/quick-lru
 
-export function assign(obj1, obj2) {
-  for (const key in obj2) {
-    obj1[key] = obj2[key]
-  }
-  return obj1
-}
-
 export default class QuickLRU {
   maxSize = 0
   cache = {}
   oldCache = {}
   _size = 0
   constructor(opts) {
-    opts = assign({}, opts)
+    opts = { ...opts }
 
     if (!(opts.maxSize && opts.maxSize > 0)) {
       throw new TypeError('`maxSize` must be a number greater than 0')

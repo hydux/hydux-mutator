@@ -1,9 +1,29 @@
-import QuickLRU, { assign } from './quicklru'
+import QuickLRU from './quicklru'
 let cache = new QuickLRU({ maxSize: 50 })
-const funRe = /(?:return|[\w$]+\s*\=\>)\s+[\w$]+(.*)\s*(?:;|}|$)/
+const funRe = /(?:return|[\w$]+\s*\=\>)\s+[\w$]+([^;}]*)?\s*(?:;|}|$)/
 
 export function setCacheSize(maxSize = 50) {
   cache = new QuickLRU({ maxSize })
+}
+const isSet = val => typeof val !== 'undefined' && val !== null
+const isFn = fn => typeof fn === 'function'
+const isPlainObject = obj => !isSet(obj.constructor) || obj.constructor === Object
+
+function clone(obj) {
+  if (isPlainObject(obj)) {
+    return { ...obj }
+  }
+  if (isFn(obj.clone)) {
+    return obj.clone()
+  }
+  const newObj = new obj.constructor()
+  const keys = Object.keys(obj)
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      newObj[key] = obj[key]
+    }
+  }
+  return newObj
 }
 
 const isQuote = s => s === '"' || s === '\''
@@ -14,7 +34,7 @@ function lambda2path(accessor: Function) {
     return keys
   }
   let m = setter.match(funRe)
-  if (!m || setter.indexOf('(') >= 0) {
+  if (!m || m[0].indexOf('(') >= 0) {
     throw new Error('Invalid setter:' + setter)
   }
   let pathStr = m[1]
@@ -55,15 +75,13 @@ function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: Mut
     typeof accessor === 'function'
       ? lambda2path(accessor)
       : accessor
-  let newRecord = new (record as any).constructor()
-  assign(newRecord, record)
+  let newRecord = clone(record)
   let dist = newRecord
   let src = record
   for (let i = 0; i < keys.length - 1; i++) {
     const key = keys[i]
     src = src[key]
-    dist = dist[key] = new (src as any).constructor()
-    assign(dist, src)
+    dist = dist[key] = clone(src)
   }
   let lastKey = keys[keys.length - 1]
   dist[lastKey] =

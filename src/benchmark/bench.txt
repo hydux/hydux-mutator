@@ -1,36 +1,36 @@
 Start Suit: Set 1 key
-immutable x 463,347 ops/sec ±17.83% (38 runs sampled)
-seamless-immutable x 43,151 ops/sec ±16.57% (43 runs sampled)
-timm x 399,784 ops/sec ±10.87% (43 runs sampled)
-monolite x 85,844 ops/sec ±13.53% (47 runs sampled)
-mutator x 104,687 ops/sec ±24.44% (47 runs sampled)
-Fastest is immutable
+immutable x 932,328 ops/sec ±14.93% (46 runs sampled)
+seamless-immutable x 67,021 ops/sec ±16.99% (44 runs sampled)
+timm x 881,627 ops/sec ±17.53% (62 runs sampled)
+monolite x 151,347 ops/sec ±13.51% (46 runs sampled)
+mutator x 219,049 ops/sec ±5.03% (71 runs sampled)
+Fastest is immutable,timm
 
 
 Start Suit: Set 2 key
-immutable x 384,360 ops/sec ±21.31% (27 runs sampled)
-seamless-immutable x 16,637 ops/sec ±9.56% (50 runs sampled)
-timm x 321,120 ops/sec ±11.68% (40 runs sampled)
-monolite x 54,933 ops/sec ±12.02% (49 runs sampled)
-mutator x 85,824 ops/sec ±8.92% (58 runs sampled)
-Fastest is immutable
+immutable x 732,474 ops/sec ±9.49% (57 runs sampled)
+seamless-immutable x 28,802 ops/sec ±12.65% (53 runs sampled)
+timm x 715,487 ops/sec ±9.31% (55 runs sampled)
+monolite x 97,454 ops/sec ±12.41% (55 runs sampled)
+mutator x 147,161 ops/sec ±16.37% (53 runs sampled)
+Fastest is immutable,timm
 
 
 Start Suit: Set 5 key
-immutable x 178,582 ops/sec ±19.49% (40 runs sampled)
-seamless-immutable x 9,104 ops/sec ±12.88% (44 runs sampled)
-timm x 183,485 ops/sec ±11.72% (51 runs sampled)
-monolite x 34,557 ops/sec ±11.83% (45 runs sampled)
-mutator x 47,307 ops/sec ±12.90% (51 runs sampled)
-Fastest is timm,immutable
+immutable x 374,647 ops/sec ±13.05% (55 runs sampled)
+seamless-immutable x 19,725 ops/sec ±8.40% (62 runs sampled)
+timm x 217,508 ops/sec ±9.00% (43 runs sampled)
+monolite x 80,403 ops/sec ±6.32% (69 runs sampled)
+mutator x 111,625 ops/sec ±4.92% (65 runs sampled)
+Fastest is immutable
 
 
 Start Suit: Set 10 key
-immutable x 119,701 ops/sec ±13.85% (48 runs sampled)
-seamless-immutable x 5,727 ops/sec ±10.60% (46 runs sampled)
-timm x 115,028 ops/sec ±15.41% (51 runs sampled)
-monolite x 23,343 ops/sec ±15.45% (56 runs sampled)
-mutator x 32,228 ops/sec ±9.58% (57 runs sampled)
-Fastest is immutable,timm
+immutable x 257,998 ops/sec ±4.59% (69 runs sampled)
+seamless-immutable x 11,238 ops/sec ±10.45% (59 runs sampled)
+timm x 219,370 ops/sec ±8.29% (59 runs sampled)
+monolite x 32,778 ops/sec ±7.16% (48 runs sampled)
+mutator x 54,496 ops/sec ±8.72% (60 runs sampled)
+Fastest is immutable
 
 
