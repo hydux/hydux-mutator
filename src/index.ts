@@ -74,6 +74,7 @@ function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: Mut
 }
 /**
  * Set a deep child
+ *
  * @param record The object to update, it can be a plain object or a class instance
  * @param accessor A lambda function to get the key path, support dot, [''], [""], [1], **do not** support dynamic variable, function call, e.g.
  * @param value The new value to set, if it is ignored it will be set to undefined.
@@ -103,4 +104,4 @@ export function updateIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], 
   return mutate(record, accessor, MutateType.updateIn, updator)
 }
 
-export default { setIn, updateIn }
+export default { setIn, unsetIn, updateIn }

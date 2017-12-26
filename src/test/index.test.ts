@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import mutator from '../index'
+import * as mutator from '../index'
 
 function sleep(ns) {
   return new Promise(resolve => setTimeout(resolve, ns))
