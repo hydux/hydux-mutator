@@ -107,6 +107,5 @@ describe('updateIn', () => {
   })
 })
 
-
 let newBook = mutator.setIn(book, _ => _.title.en, 'nnn')
 newBook = mutator.updateIn(book, _ => _.tags, t => [...t, 'novel'])
