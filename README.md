@@ -11,7 +11,7 @@ A statically-typed immutable update helper library.
 * Statically-typed
 * Support class state
   * Using constructor to create new instance
-  * Class can define a `clone` method to customize shallow clone.
+  * Class can define a `shallowClone` method to customize shallow clone.
 
 ## install
 

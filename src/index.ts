@@ -1,20 +1,25 @@
+import { IShallowClonable } from './types'
 import QuickLRU from './quicklru'
 let cache = new QuickLRU({ maxSize: 50 })
 const funRe = /(?:return|[\w$]+\s*\=\>)\s+[\w$]+([^;}]*)?\s*(?:;|}|$)/
+
+export { IShallowClonable }
 
 export function setCacheSize(maxSize = 50) {
   cache = new QuickLRU({ maxSize })
 }
 const isSet = val => typeof val !== 'undefined' && val !== null
-const isFn = fn => typeof fn === 'function'
+function isFn(fn): fn is Function {
+  return typeof fn === 'function'
+}
 const isPlainObject = obj => !isSet(obj.constructor) || obj.constructor === Object
 
 function clone(obj) {
   if (isPlainObject(obj)) {
     return { ...obj }
   }
-  if (isFn(obj.clone)) {
-    return obj.clone()
+  if (isFn(obj.shallowClone)) {
+    return obj.shallowClone()
   }
   const newObj = new obj.constructor()
   const keys = Object.keys(obj)
@@ -27,7 +32,10 @@ function clone(obj) {
 }
 
 const isQuote = s => s === '"' || s === '\''
-function lambda2path(accessor: Function) {
+function getPathKeys(accessor: Function | string[]): string[] {
+  if (!isFn(accessor)) {
+    return accessor
+  }
   let setter = accessor.toString()
   let keys: string[] = cache.get(setter)
   if (keys) {
@@ -66,15 +74,20 @@ function lambda2path(accessor: Function) {
   cache.set(setter, keys)
   return keys
 }
+
 enum MutateType {
   setIn = 1,
   updateIn = 2
 }
+
 function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: MutateType, updator: ((v: V) => V) | V): T {
-  let keys =
-    typeof accessor === 'function'
-      ? lambda2path(accessor)
-      : accessor
+  const isUpdate = type === MutateType.updateIn
+  let keys = getPathKeys(accessor)
+  if (isUpdate && isFn((record as any).updateIn)) {
+    return (record as any).updateIn(keys, updator)
+  } else if (isFn((record as any).setIn)) {
+    return (record as any).setIn(keys, updator)
+  }
   let newRecord = clone(record)
   let dist = newRecord
   let src = record
@@ -85,10 +98,29 @@ function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: Mut
   }
   let lastKey = keys[keys.length - 1]
   dist[lastKey] =
-    type === MutateType.updateIn
+    isUpdate
       ? (updator as any)(src[lastKey])
       : updator
   return newRecord
+}
+/**
+ * get a deep child
+ *
+ * @param record The object to update, it can be a plain object or a class instance
+ * @param accessor A lambda function to get the key path, support dot, [''], [""], [1], **do not** support dynamic variable, function call, e.g.
+ */
+export function getIn<T, V>(record: T, accessor: ((obj: T) => V) | string[]): V {
+  let v = record as any as V
+  const keys = getPathKeys(accessor)
+  if (isFn((record as any).getIn)) {
+    return (record as any).getIn(keys)
+  }
+  let len = keys.length
+  for (let i = 0; i < len; i++) {
+    const key = keys[i]
+    v = record[key]
+  }
+  return v
 }
 /**
  * Set a deep child
