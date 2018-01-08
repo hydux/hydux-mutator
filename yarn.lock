@@ -40,6 +40,10 @@
   version "8.0.56"
   resolved "http://registry.npm.taobao.org/@types/node/download/@types/node-8.0.56.tgz#c4652f88d7a677e26ccc16c1485c282ce28f1ce9"
 
+"@types/parsimmon@^1.6.1":
+  version "1.6.1"
+  resolved "http://registry.npm.taobao.org/@types/parsimmon/download/@types/parsimmon-1.6.1.tgz#c5d849baf59820389d03564ec4b0bea5900e64cb"
+
 "@types/shelljs@0.7.0":
   version "0.7.0"
   resolved "http://registry.npm.taobao.org/@types/shelljs/download/@types/shelljs-0.7.0.tgz#229c157c6bc1e67d6b990e6c5e18dbd2ff58cff0"
@@ -2542,6 +2546,10 @@ parse-json@^2.2.0:
   resolved "http://registry.npm.taobao.org/parse-json/download/parse-json-2.2.0.tgz#f480f40434ef80741f8469099f8dea18f55a4dc9"
   dependencies:
     error-ex "^1.2.0"
+
+parsimmon@^1.6.4:
+  version "1.6.4"
+  resolved "http://registry.npm.taobao.org/parsimmon/download/parsimmon-1.6.4.tgz#7ff16d52d58b9769d019b401848ee2c9bd94dd86"
 
 pascalcase@^0.1.1:
   version "0.1.1"

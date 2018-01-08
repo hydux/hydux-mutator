@@ -1,5 +1,6 @@
 import { IShallowClonable } from './types'
 import QuickLRU from './quicklru'
+import P from 'parsimmon'
 let cache = new QuickLRU({ maxSize: 50 })
 const funRe = /(?:return|[\w$]+\s*\=\>)\s+[\w$]+([^;}]*)?\s*(?:;|}|$)/
 
@@ -9,9 +10,7 @@ export function setCacheSize(maxSize = 50) {
   cache = new QuickLRU({ maxSize })
 }
 const isSet = val => typeof val !== 'undefined' && val !== null
-function isFn(fn): fn is Function {
-  return typeof fn === 'function'
-}
+const isFn = (fn): fn is Function => typeof fn === 'function'
 const isPlainObject = obj => !isSet(obj.constructor) || obj.constructor === Object
 
 function clone(obj) {
@@ -80,7 +79,7 @@ enum MutateType {
   updateIn = 2
 }
 
-function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: MutateType, updator: ((v: V) => V) | V): T {
+function mutate<T, V, A>(record: T, accessor: ((obj: T, args: A) => V) | string[], type: MutateType, updator: ((v: V) => V) | V, args: A): T {
   const isUpdate = type === MutateType.updateIn
   let keys = getPathKeys(accessor)
   if (isUpdate && isFn((record as any).updateIn)) {
@@ -129,8 +128,8 @@ export function getIn<T, V>(record: T, accessor: ((obj: T) => V) | string[]): V 
  * @param accessor A lambda function to get the key path, support dot, [''], [""], [1], **do not** support dynamic variable, function call, e.g.
  * @param value The new value to set, if it is ignored it will be set to undefined.
  */
-export function setIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], value?: V): T {
-  return mutate(record, accessor, MutateType.setIn, value as V)
+export function setIn<T, V, A>(record: T, accessor: ((obj: T, args: A) => V) | string[], value?: V, args?: A): T {
+  return mutate(record, accessor, MutateType.setIn, value as V, args)
 }
 /**
  * Unset a deep child
