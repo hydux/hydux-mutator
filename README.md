@@ -36,7 +36,7 @@ user = setIn(user, _ => _.name, 'bb')
 user = updateIn(user, _ => _.age, a => a + 10)
 ```
 
-**Note**: The accessor lambda function only support literal field of plain object/array. e.g.
+**Note**: The accessor lambda function only support plain object/array. e.g.
 
 ```js
 setIn(user, _ => _.name, 'a')
@@ -48,7 +48,6 @@ setIn(user, _ => _.tags[0], 'a')
 Which **not** support:
 
 * Map/Set/Third-party collection library
-* dynamic keys
 
 But how can I use it in these scenarios? The answer is nesting:
 
@@ -63,10 +62,16 @@ state = updateIn(state, _ => _.userMap, map => (
   map.set(key, setIn(map.get(key), _ => _.name, 'new name')),
   map
 ))
-state = updateIn(state, _ => _.userObjMap, m => ({
-  ...m,
-  [key]: setIn(m[key], _ => _.name, 'new name')
-}))
+```
+
+### Dynamic keys
+
+```js
+let state = {
+  userObjMap: {} as {[key: string]: User},
+}
+let key = 'some key'
+state = setIn(state, _ => _.userObjMap[key], 'new name', { key })
 ```
 
 ## What's the difference with `monolite`

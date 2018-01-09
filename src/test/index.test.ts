@@ -1,5 +1,7 @@
 import * as assert from 'assert'
 import * as mutator from '../index'
+import * as util from 'util'
+import Parser from '../parser'
 
 function sleep(ns) {
   return new Promise(resolve => setTimeout(resolve, ns))
@@ -121,5 +123,88 @@ describe('updateIn', () => {
   })
 })
 
+describe('dynamic updateIn', () => {
+  it('simple', () => {
+    const type = 'en'
+    const newBook = mutator.updateIn(book, _ => _.title[type], title => title + ' (Original Edition)', { type })
+    assert.deepEqual(book, originalBook)
+    assert.equal(newBook.title.en, 'Harry Potter and the Philosopher\'s Stone (Original Edition)')
+    assert(newBook.tags === book.tags)
+    assert.deepEqual(newBook.tags, book.tags)
+    assert.notEqual(newBook, book)
+    assert.notEqual(newBook.title, book.title)
+  })
+})
+
 let newBook = mutator.setIn(book, _ => _.title.en, 'nnn')
 newBook = mutator.updateIn(book, _ => _.tags, t => [...t, 'novel'])
+
+const expected = { args: [ 'a', [ 'a1', 'a2', 'a3' ] ],
+  obj: 'a',
+  keyPath:
+  [ { type: 'string', value: 'bb' },
+    { type: 'string', value: 'cc' },
+    { type: 'string', value: 'aa' },
+    { type: 'number', value: 1 },
+    { type: 'string', value: 'dd' },
+    { type: 'variable', value: 'a1' },
+    { type: 'string', value: 'cc' } ] }
+const parse = str => Parser.accessor.tryParse(str)
+function prettyPrint(x) {
+  let opts = { depth: null, colors: true }
+  let s = util.inspect(x, opts)
+  console.log(s)
+}
+
+describe('parser', () => {
+  it('function', () => {
+    console.time('parse function')
+    let ast = parse(
+    `function (a, [a1,a2,a3]) { return a.bb.cc['aa'][1]["dd"][a1]['cc']; }`
+    )
+    console.timeEnd('parse function')
+    prettyPrint(ast)
+    assert.deepEqual(ast, expected)
+  })
+
+  it('lambda with args', () => {
+    console.time('parse lambda with args')
+    let ast = parse(
+      `(a, [a1,a2,a3]) => { return a.bb.cc['aa'][1]["dd"][a1]['cc']; }`
+    )
+    console.timeEnd('parse lambda with args')
+    prettyPrint(ast)
+    console.time('start')
+    assert.deepEqual(ast, expected)
+    console.timeEnd('start')
+  })
+
+  it('lambda', () => {
+    console.time('parse lambda')
+    let ast = parse(
+      `_ => _.bb.cc['aa'][1]["dd"][a1]['cc']`
+    )
+    console.timeEnd('parse lambda')
+    prettyPrint(ast)
+    assert.deepEqual(ast, { args: [ '_' ],
+      obj: '_',
+      keyPath:
+      [ { type: 'string', value: 'bb' },
+        { type: 'string', value: 'cc' },
+        { type: 'string', value: 'aa' },
+        { type: 'number', value: 1 },
+        { type: 'string', value: 'dd' },
+        { type: 'variable', value: 'a1' },
+        { type: 'string', value: 'cc' } ] })
+  })
+
+  it('self', () => {
+    console.time('parse lambda')
+    let ast = parse(
+      `_ => _`
+    )
+    console.timeEnd('parse lambda')
+    prettyPrint(ast)
+    assert.deepEqual(ast, { args: [ '_' ], obj: '_', keyPath: [] })
+  })
+})

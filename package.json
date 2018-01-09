@@ -8,7 +8,7 @@
   "scripts": {
     "build": "del lib && tsc -d -t es5 && cp ./index.js.flow ./lib",
     "build:dist": "webpack -p --progress --profile",
-    "test": "mocha --require espower-typescript/guess \"src/test/**/*.ts\" \"lib/test/**/*.js\"",
+    "test": "mocha --require espower-typescript/guess \"src/test/**/*.ts\" \"lib/test/**/*.js\" -t 5000",
     "test:watch": "npm run test -- -w --watch-extensions ts,tsx",
     "doc": "typedoc --theme minimal --out ./docs --exclude ./test ./src && touch ./docs/.nojekyll",
     "preversion": "npm run test && npm run build && npm run build:dist && git add -A",
@@ -35,7 +35,6 @@
   "devDependencies": {
     "@types/mocha": "^2.2.44",
     "@types/node": "^8.0.56",
-    "@types/parsimmon": "^1.6.1",
     "awesome-typescript-loader": "^3.4.1",
     "benchmark": "^2.1.4",
     "clean-webpack-plugin": "^0.1.17",
@@ -46,7 +45,7 @@
     "immutable": "^3.8.2",
     "immuter": "^2.0.5",
     "microtime": "^2.1.6",
-    "mocha": "^4.0.1",
+    "mocha": "^4.1.0",
     "monolite": "^0.4.5",
     "power-assert": "^1.4.4",
     "pre-commit": "^1.2.2",
