@@ -48,6 +48,7 @@ setIn(user, _ => _.tags[0], 'a')
 Which **not** support:
 
 * Map/Set/Third-party collection library
+* Function calls
 
 But how can I use it in these scenarios? The answer is nesting:
 
@@ -65,6 +66,8 @@ state = updateIn(state, _ => _.userMap, map => (
 ```
 
 ### Dynamic keys
+
+Because hydux-mutator get the deep key path by parsing the lambda string, we cannot get the dynamic path in the accessor scope, so we have to pass it to the function as ctx, see:
 
 ```js
 let state = {

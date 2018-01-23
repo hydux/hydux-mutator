@@ -88,7 +88,7 @@ enum MutateType {
   updateIn = 2
 }
 
-function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: MutateType, updator: ((v: V) => V) | V, ctx?: {[key: string]: string}): T {
+function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: MutateType, updator: ((v: V) => V) | V, ctx?: {[key: string]: any}): T {
   const isUpdate = type === MutateType.updateIn
   let keys = getPathKeys(accessor, ctx)
   if (isUpdate && isFn((record as any).updateIn)) {
@@ -118,7 +118,7 @@ function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: Mut
  * @param accessor A lambda function to get the key path, support dot, [''], [""], [1], **do not** support dynamic variable, function call, e.g.
  * @param ctx Dynamic key map.
  */
-export function getIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], ctx?: {[key: string]: string}): V {
+export function getIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], ctx?: {[key: string]: any}): V {
   let v = record as any as V
   const keys = getPathKeys(accessor, ctx)
   if (isFn((record as any).getIn)) {
@@ -139,7 +139,7 @@ export function getIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], ctx
  * @param value The new value to set, if it is ignored it will be set to undefined.
  * @param ctx Dynamic key map.
  */
-export function setIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], value?: V, ctx?: {[key: string]: string}): T {
+export function setIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], value?: V, ctx?: {[key: string]: any}): T {
   return mutate(record, accessor, MutateType.setIn, value as V, ctx)
 }
 
@@ -160,7 +160,7 @@ export function unsetIn<T, V>(record: T, accessor: ((obj: T) => V | undefined) |
  * @param updator A update function that take the old value and return the new value.
  * @param ctx Dynamic key map.
  */
-export function updateIn<T, V, A>(record: T, accessor: ((obj: T) => V) | string[], updator?: (v: V) => V, ctx?: {[key: string]: string}): T {
+export function updateIn<T, V, A>(record: T, accessor: ((obj: T) => V) | string[], updator?: (v: V) => V, ctx?: {[key: string]: any}): T {
   if (!updator) {
     return record
   }
