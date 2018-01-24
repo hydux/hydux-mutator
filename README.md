@@ -74,8 +74,10 @@ let state = {
   userObjMap: {} as {[key: string]: User},
 }
 let key = 'some key'
-state = setIn(state, _ => _.userObjMap[key], 'new name', { key })
+state = setIn(state, _ => _.userObjMap[key], 'new name', [key])
 ```
+
+> **NOTE:** The order of ctx should be the same as the occurrence order of dynamic keys.
 
 ## What's the difference with `monolite`
 

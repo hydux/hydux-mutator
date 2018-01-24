@@ -126,7 +126,9 @@ describe('updateIn', () => {
 describe('dynamic updateIn', () => {
   it('simple', () => {
     const type = 'en'
-    const newBook = mutator.updateIn(book, _ => _.title[type], title => title + ' (Original Edition)', { type })
+    const title = 'title'
+    const newBookTmp = mutator.updateIn(book, _ => _[title][type], title => title + ' tem', [title, type])
+    const newBook = mutator.updateIn(book, _ => _[title][type], title => title + ' (Original Edition)', [title, type])
     assert.deepEqual(book, originalBook)
     assert.equal(newBook.title.en, 'Harry Potter and the Philosopher\'s Stone (Original Edition)')
     assert(newBook.tags === book.tags)

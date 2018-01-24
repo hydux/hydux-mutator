@@ -45,40 +45,45 @@ type Ast = {
 }
 
 type KeyPath = (string | number)[]
+const error = (...args) => console.error('[hydux-mutator]', ...args)
 
-function getPathKeys(accessor: Function | string[], ctx: {[key: string]: string} = {}): KeyPath {
+function getPathKeys(accessor: Function | string[], ctx: (string | number)[] = []): KeyPath {
   if (!isFn(accessor)) {
     return accessor
   }
   let setter = accessor.toString()
   const cache = Cache.get(setter)
   if (cache) {
-    for (const [i, key] of cache.map) {
-      cache.keys[i] = ctx[key]
+    const len = cache.dynamicKeys.length
+    for (let i = 0; i < len; i++) {
+      cache.keys[cache.dynamicKeys[i]] = ctx[i]
     }
     return cache.keys
   }
   let keys: (string | number)[] = []
-  const ast: Ast = parse(setter)
+  let ast: Ast = null as any
+  try {
+    ast = parse(setter)
+  } catch (error) {
+    error('parse accessor failed, accessor:', setter)
+    throw error
+  }
 
   const len = ast.keyPath.length
-  const map: [number, string][] = []
+  const dynamicKeys: number[] = []
+  let variableIdx = 0
   for (let i = 0; i < len; i++) {
     const item = ast.keyPath[i]
     if (item.type === 'string' || item.type === 'number') {
       keys[i] = item.value
     } else if (item.type === 'variable') {
-      if (!(item.value in ctx)) {
-        console.error('context', ctx)
-        throw TypeError('Cannot find dynamic key in context:' + accessor)
-      }
-      keys[i] = ctx[item.value]
-      map.push([i, item.value])
+      keys[i] = ctx[variableIdx++]
+      dynamicKeys.push(i)
     }
   }
   Cache.set(setter, {
     keys,
-    map,
+    dynamicKeys,
   })
   return keys
 }
@@ -88,7 +93,7 @@ enum MutateType {
   updateIn = 2
 }
 
-function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: MutateType, updator: ((v: V) => V) | V, ctx?: {[key: string]: any}): T {
+function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: MutateType, updator: ((v: V) => V) | V, ctx?: (string | number)[]): T {
   const isUpdate = type === MutateType.updateIn
   let keys = getPathKeys(accessor, ctx)
   if (isUpdate && isFn((record as any).updateIn)) {
@@ -118,7 +123,7 @@ function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: Mut
  * @param accessor A lambda function to get the key path, support dot, [''], [""], [1], **do not** support dynamic variable, function call, e.g.
  * @param ctx Dynamic key map.
  */
-export function getIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], ctx?: {[key: string]: any}): V {
+export function getIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], ctx?: (string | number)[]): V {
   let v = record as any as V
   const keys = getPathKeys(accessor, ctx)
   if (isFn((record as any).getIn)) {
@@ -139,7 +144,7 @@ export function getIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], ctx
  * @param value The new value to set, if it is ignored it will be set to undefined.
  * @param ctx Dynamic key map.
  */
-export function setIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], value?: V, ctx?: {[key: string]: any}): T {
+export function setIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], value?: V, ctx?: (string | number)[]): T {
   return mutate(record, accessor, MutateType.setIn, value as V, ctx)
 }
 
@@ -150,7 +155,7 @@ export function setIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], val
  * @param accessor A lambda function to get the key path, support dot, [''], [""], [1], **do not** support dynamic variable, function call, e.g.
  * @param ctx Dynamic key map.
  */
-export function unsetIn<T, V>(record: T, accessor: ((obj: T) => V | undefined) | string[], ctx?: {[key: string]: string}): T {
+export function unsetIn<T, V>(record: T, accessor: ((obj: T) => V | undefined) | string[], ctx?: (string | number)[]): T {
   return mutate(record, accessor, MutateType.setIn, void 0, ctx)
 }
 /**
@@ -160,7 +165,7 @@ export function unsetIn<T, V>(record: T, accessor: ((obj: T) => V | undefined) |
  * @param updator A update function that take the old value and return the new value.
  * @param ctx Dynamic key map.
  */
-export function updateIn<T, V, A>(record: T, accessor: ((obj: T) => V) | string[], updator?: (v: V) => V, ctx?: {[key: string]: any}): T {
+export function updateIn<T, V, A>(record: T, accessor: ((obj: T) => V) | string[], updator?: (v: V) => V, ctx?: (string | number)[]): T {
   if (!updator) {
     return record
   }
