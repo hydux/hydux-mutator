@@ -44,15 +44,21 @@ type Ast = {
   keyPath: AstKey[]
 }
 
-type KeyPath = (string | number)[]
+export type KeyPath = (string | number)[]
+export type Accessor<T, V> = ((obj: T) => V) | KeyPath
 const error = (...args) => console.error('[hydux-mutator]', ...args)
 
-function getPathKeys(accessor: Function | string[], ctx: (string | number)[] = []): KeyPath {
+type PathCache = {
+  keys: (string | number)[],
+  dynamicKeys: number[],
+}
+
+function getPathKeys<T, V>(accessor: Accessor<T, V>, ctx: KeyPath = []): KeyPath {
   if (!isFn(accessor)) {
     return accessor
   }
   let setter = accessor.toString()
-  const cache = Cache.get(setter)
+  const cache = Cache.get<PathCache>(setter)
   if (cache) {
     const len = cache.dynamicKeys.length
     for (let i = 0; i < len; i++) {
@@ -81,7 +87,7 @@ function getPathKeys(accessor: Function | string[], ctx: (string | number)[] = [
       dynamicKeys.push(i)
     }
   }
-  Cache.set(setter, {
+  Cache.set<PathCache>(setter, {
     keys,
     dynamicKeys,
   })
@@ -93,9 +99,9 @@ enum MutateType {
   updateIn = 2
 }
 
-function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: MutateType, updator: ((v: V) => V) | V, ctx?: (string | number)[]): T {
+function mutate<T, V>(record: T, accessor: Accessor<T, V>, type: MutateType, updator: ((v: V) => V) | V, ctx?: KeyPath): T {
   const isUpdate = type === MutateType.updateIn
-  let keys = getPathKeys(accessor, ctx)
+  let keys = getPathKeys<T, V>(accessor, ctx)
   if (isUpdate && isFn((record as any).updateIn)) {
     return (record as any).updateIn(keys, updator)
   } else if (isFn((record as any).setIn)) {
@@ -123,7 +129,7 @@ function mutate<T, V>(record: T, accessor: ((obj: T) => V) | string[], type: Mut
  * @param accessor A lambda function to get the key path, support dot, [''], [""], [1], **do not** support dynamic variable, function call, e.g.
  * @param ctx Dynamic key map.
  */
-export function getIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], ctx?: (string | number)[]): V {
+export function getIn<T, V>(record: T, accessor: Accessor<T, V>, ctx?: KeyPath): V {
   let v = record as any as V
   const keys = getPathKeys(accessor, ctx)
   if (isFn((record as any).getIn)) {
@@ -144,7 +150,7 @@ export function getIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], ctx
  * @param value The new value to set, if it is ignored it will be set to undefined.
  * @param ctx Dynamic key map.
  */
-export function setIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], value?: V, ctx?: (string | number)[]): T {
+export function setIn<T, V>(record: T, accessor: Accessor<T, V>, value?: V, ctx?: KeyPath): T {
   return mutate(record, accessor, MutateType.setIn, value as V, ctx)
 }
 
@@ -155,7 +161,7 @@ export function setIn<T, V>(record: T, accessor: ((obj: T) => V) | string[], val
  * @param accessor A lambda function to get the key path, support dot, [''], [""], [1], **do not** support dynamic variable, function call, e.g.
  * @param ctx Dynamic key map.
  */
-export function unsetIn<T, V>(record: T, accessor: ((obj: T) => V | undefined) | string[], ctx?: (string | number)[]): T {
+export function unsetIn<T, V>(record: T, accessor: Accessor<T, V | void>, ctx?: KeyPath): T {
   return mutate(record, accessor, MutateType.setIn, void 0, ctx)
 }
 /**
@@ -165,7 +171,7 @@ export function unsetIn<T, V>(record: T, accessor: ((obj: T) => V | undefined) |
  * @param updator A update function that take the old value and return the new value.
  * @param ctx Dynamic key map.
  */
-export function updateIn<T, V, A>(record: T, accessor: ((obj: T) => V) | string[], updator?: (v: V) => V, ctx?: (string | number)[]): T {
+export function updateIn<T, V, A>(record: T, accessor: Accessor<T, V>, updator?: (v: V) => V, ctx?: KeyPath): T {
   if (!updator) {
     return record
   }

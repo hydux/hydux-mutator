@@ -27,7 +27,7 @@ export default class QuickLRU {
     }
   }
 
-  get(key) {
+  get<T>(key): T | void {
     if (typeof this.cache[key] !== 'undefined') {
       return this.cache[key]
     }
@@ -39,7 +39,7 @@ export default class QuickLRU {
     }
   }
 
-  set(key, value) {
+  set<T>(key: string, value: T): this {
     if (typeof this.cache[key] !== 'undefined') {
       this.cache[key] = value
     } else {
