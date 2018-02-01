@@ -3489,7 +3489,7 @@ trim-newlines@^1.0.0:
 
 ts-node@^4.1.0:
   version "4.1.0"
-  resolved "http://registry.npm.taobao.org/ts-node/download/ts-node-4.1.0.tgz#36d9529c7b90bb993306c408cd07f7743de20712"
+  resolved "https://registry.npmjs.org/ts-node/-/ts-node-4.1.0.tgz#36d9529c7b90bb993306c408cd07f7743de20712"
   dependencies:
     arrify "^1.0.0"
     chalk "^2.3.0"
