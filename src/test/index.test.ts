@@ -2,6 +2,7 @@ import * as assert from 'assert'
 import * as mutator from '../index'
 import * as util from 'util'
 import Parser from '../parser'
+import * as Immutable from 'immutable'
 
 function sleep(ns) {
   return new Promise(resolve => setTimeout(resolve, ns))

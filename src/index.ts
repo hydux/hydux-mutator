@@ -43,13 +43,13 @@ type Ast = {
   obj: string,
   keyPath: AstKey[]
 }
-
-export type KeyPath = (string | number)[]
+export type Key = string | number | symbol
+export type KeyPath = Key[]
 export type Accessor<T, V> = ((obj: T) => V) | KeyPath
 const error = (...args) => console.error('[hydux-mutator]', ...args)
 
 type PathCache = {
-  keys: (string | number)[],
+  keys: KeyPath,
   dynamicKeys: number[],
 }
 
@@ -66,7 +66,7 @@ function getPathKeys<T, V>(accessor: Accessor<T, V>, ctx: KeyPath = []): KeyPath
     }
     return cache.keys
   }
-  let keys: (string | number)[] = []
+  let keys: KeyPath = []
   let ast: Ast = null as any
   try {
     ast = parse(setter)

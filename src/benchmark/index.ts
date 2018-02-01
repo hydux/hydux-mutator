@@ -1,6 +1,7 @@
 
 const Benchmark = require('benchmark')
 const immutable = require('immutable')
+import * as immutable2 from 'immutable'
 const timm = require('timm')
 
 import * as monolite from 'monolite'
