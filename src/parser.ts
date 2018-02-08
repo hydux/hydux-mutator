@@ -40,6 +40,7 @@ export default P.createLanguage({
   lbracket: () => word('['),
   rbracket: () => word(']'),
   lparen: () => word('('),
+  get: () => word('get'),
   rparen: () => word(')'),
   lbrace: () => word('{'),
   rbrace: () => word('}'),
@@ -47,32 +48,31 @@ export default P.createLanguage({
   dot: () => word('.'),
   semi: () => word(';'),
   arrow: () => word('=>'),
-  field: r => r.dot
-    .then(r.letters.map(value => ({
+  param: r =>
+    P.regexp(/"((?:\\.|.)*?)"/, 1)
+      .map(value => ({
+        type: 'string',
+        value: interpretEscapes(value)
+      }))
+      .or(P.regexp(/'((?:\\.|.)*?)'/, 1).map(value => ({
+        type: 'string',
+        value: interpretEscapes(value)
+      })))
+      .or(P.regexp(/\d+/).map(value => ({
+        type: 'number',
+        value: Number(value)
+      })))
+      .or(r.letters.map(value => ({
+        type: 'variable',
+        value,
+      }))),
+  field: r => r._
+    .then(r.dot.then(r.get).then(r.lparen).then(r.param).skip(r.rparen))
+    .or(r.dot.then(r.letters.map(value => ({
       type: 'string',
       value
-    })))
-    .or(r.lbracket.then(
-          P.regexp(/"((?:\\.|.)*?)"/, 1)
-            .map(value => ({
-              type: 'string',
-              value: interpretEscapes(value)
-            }))
-            .or(P.regexp(/'((?:\\.|.)*?)'/, 1).map(value => ({
-              type: 'string',
-              value: interpretEscapes(value)
-            })))
-            .or(P.regexp(/\d+/).map(value => ({
-              type: 'number',
-              value: Number(value)
-            })))
-            .or(r.letters.map(value => ({
-              type: 'variable',
-              value,
-            })))
-        )
-        .skip(r.rbracket)
-    ),
+    }))))
+    .or(r.lbracket.then(r.param).skip(r.rbracket)),
   fnKeyword: () => word('function'),
   return: () => word('return'),
   function: r => P.seqObj(

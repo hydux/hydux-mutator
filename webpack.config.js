@@ -10,6 +10,7 @@ const DIST = `${__dirname}/static/dist`
 module.exports = module.exports = {
   entry: {
     mutator: "./src/index.ts",
+    collections: "./src/collections/index.ts",
   },
   output: {
       filename: "hydux.[name].js",

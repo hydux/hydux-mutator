@@ -8,9 +8,12 @@
   "scripts": {
     "build": "del lib && tsc -d -t es5 && cp ./index.js.flow ./lib",
     "build:dist": "webpack -p --progress --profile",
-    "test": "mocha --require espower-typescript/guess \"src/test/**/*.ts\" \"lib/test/**/*.js\" -t 5000",
+    "test": "npm run test:ts && npm run test:es5",
+    "test:ts": "mocha --require espower-typescript/guess \"src/test/**/*.ts\" -t 5000",
+    "test:es5": "npm run build && mocha \"lib/test/**/*.js\" -t 5000",
+    "cover": "nyc npm test",
     "test:watch": "npm run test -- -w --watch-extensions ts,tsx",
-    "doc": "typedoc --theme minimal --out ./docs --exclude ./test ./src && touch ./docs/.nojekyll",
+    "doc": "typedoc --theme minimal --exclude \"**/{test,benchmark}/*.ts\"  --excludeNotExported --excludePrivate --out ./docs ./src && touch ./docs/.nojekyll",
     "preversion": "npm run test && npm run build && npm run build:dist && git add -A",
     "bench": "NODE_ENV=production node ./lib/benchmark/index.js > ./src/benchmark/bench.txt"
   },
@@ -47,6 +50,7 @@
     "microtime": "^2.1.6",
     "mocha": "^4.1.0",
     "monolite": "^0.4.5",
+    "nyc": "^11.4.1",
     "power-assert": "^1.4.4",
     "pre-commit": "^1.2.2",
     "seamless-immutable": "^7.1.2",
@@ -60,6 +64,7 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
+    "@funkia/list": "^0.1.0",
     "parsimmon": "^1.6.4",
     "quick-lru": "^1.1.0",
     "tslib": "^1.8.1"

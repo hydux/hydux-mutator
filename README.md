@@ -19,7 +19,7 @@ A statically-typed immutable update helper library.
 yarn add hydux-mutator # or npm i hydux-mutator
 ```
 
-![](https://github.com/hydux/hydux-mutator/raw/master/docs/media.gif)
+![](https://github.com/hydux/hydux-mutator/raw/master/media/media.gif)
 
 ## Usage
 
@@ -78,6 +78,59 @@ state = setIn(state, _ => _.userObjMap[key], 'new name', [key])
 ```
 
 > **NOTE:** The order of ctx should be the same as the occurrence order of dynamic keys.
+
+### Collections
+
+We also provide some immutable collections like [immutable-js](facebook.github.io/immutable-js/), which has O(1) - O(logN) performance for update operations.
+
+* [ImmuList](https://hydux.github.io/hydux-mutator/classes/_collections_list_.immulist.html): Under the hood is [@funkia/list](https://github.com/funkia/list), a modified implemenation of RRB tree with pretty good performance.
+* [ImmuMap](https://hydux.github.io/hydux-mutator/classes/_collections_map_.immumap.html): Based on [an OCaml's immutable balanced tree implementation](https://bucklescript.github.io/bucklescript-playground/index.html#Balanced_tree).
+* [ImmuSet](https://hydux.github.io/hydux-mutator/classes/_collections_set_.immuset.html): Based on ImmuMap.
+
+**Note:** Polyfill for `Symbol.iterator` is required!
+
+All these collections can work seamlessly with `setIn/updateIn/getIn/unsetIn` functions!
+
+```ts
+import { setIn } from 'hydux-mutator'
+import ImmuList from 'hydux-mutator/lib/list'
+
+const book = {
+  title: 'book1'
+}
+const state = {
+  list: new ImmuList([book, book, book])
+}
+setIn(state, _ => _.list.get(0).title, 'new title')
+
+```
+
+We also support fb's [immutable-js](facebook.github.io/immutable-js/) or others contains `.get(key: string | number)` and `.set(key: string | number, value: any)` methods.
+
+### [immer](https://github.com/mweststrate/immer)
+
+Immer like api.
+
+**Note:** This is based on [es6 Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), you might need a [proxy polyfill](https://github.com/GoogleChrome/proxy-polyfill) if you want to use in es5 environment.
+
+```ts
+import immer from 'hydux-mutator/lib/immer'
+
+const state = {
+  subState: {
+    nestedSubState: 1
+  }
+}
+
+const nextState = immer(state, (draft, state) => {
+  draft.subState.nestedSubState = state.subState.nestedSubState + 1
+})
+// nextState => {
+//   subState: {
+//     nestedSubState: 2
+//   }
+// }
+```
 
 ## What's the difference with `monolite`
 

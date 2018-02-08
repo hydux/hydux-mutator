@@ -46,13 +46,13 @@ const book = {
 describe('setIn', () => {
   it('simple', () => {
     const newBook = mutator.setIn(book, _ => _.author, 'J')
-    assert(newBook.author === 'J')
-    assert(book.author === originalBook.author)
-    assert(newBook !== book)
-    assert(newBook.category === book.category)
-    assert(newBook.pub_date === book.pub_date)
+    assert.equal(newBook.author, 'J', 'author')
+    assert.equal(book.author, originalBook.author, 'original author')
+    assert.notEqual(newBook, book, 'book')
+    assert.equal(newBook.category, book.category, 'category should keep')
+    assert.equal(newBook.pub_date, book.pub_date, 'pub_date should keep')
   })
-  it('simple', () => {
+  it('simple2', () => {
     const newBook = mutator.setIn(book, _ => _.title.en, 'Harry Potter and something...')
     assert.deepEqual(book, originalBook, 'book shouldn\'t change')
     assert.equal(newBook.title.en, 'Harry Potter and something...', 'title.en should change')
@@ -154,9 +154,9 @@ const expected = { args: [ 'a', [ 'a1', 'a2', 'a3' ] ],
     { type: 'string', value: 'cc' } ] }
 const parse = str => Parser.accessor.tryParse(str)
 function prettyPrint(x) {
-  let opts = { depth: null, colors: true }
-  let s = util.inspect(x, opts)
-  console.log(s)
+  // let opts = { depth: null, colors: true }
+  // let s = util.inspect(x, opts)
+  // console.log(s)
 }
 
 describe('parser', () => {
@@ -185,7 +185,7 @@ describe('parser', () => {
   it('lambda', () => {
     console.time('parse lambda')
     let ast = parse(
-      `_ => _.bb.cc['aa'][1]["dd"][a1]['cc']`
+      `_ => _.bb.cc['aa'].get('cc')[1]["dd"][a1].get(ee).get("ff")`
     )
     console.timeEnd('parse lambda')
     prettyPrint(ast)
@@ -195,10 +195,12 @@ describe('parser', () => {
       [ { type: 'string', value: 'bb' },
         { type: 'string', value: 'cc' },
         { type: 'string', value: 'aa' },
+        { type: 'string', value: 'cc' },
         { type: 'number', value: 1 },
         { type: 'string', value: 'dd' },
         { type: 'variable', value: 'a1' },
-        { type: 'string', value: 'cc' } ] })
+        { type: 'variable', value: 'ee' },
+        { type: 'string', value: 'ff' }, ] })
   })
 
   it('self', () => {
@@ -209,5 +211,16 @@ describe('parser', () => {
     console.timeEnd('parse lambda')
     prettyPrint(ast)
     assert.deepEqual(ast, { args: [ '_' ], obj: '_', keyPath: [] })
+  })
+})
+
+describe('getIn', () => {
+  it('simple', () => {
+    assert.equal(book.title, mutator.getIn(book, _ => _.title), 'title should work')
+
+    assert.equal(book.tags, mutator.getIn(book, _ => _.tags), 'tags should work')
+    assert.equal(book.tags[0], mutator.getIn(book, _ => _.tags[0]), 'tags item should work')
+    assert.equal(undefined, mutator.getIn(book, _ => (_.tags as any).aa.bbb), 'undefined should work')
+    assert.equal(undefined, mutator.getIn(book, ['aa', 'bb', 1, 2]), 'undefined for array should work')
   })
 })
