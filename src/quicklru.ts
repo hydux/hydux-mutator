@@ -5,7 +5,7 @@ export default class QuickLRU {
   maxSize = 0
   cache = {}
   oldCache = {}
-  _size = 0
+  private _size = 0
   constructor(opts) {
     opts = { ...opts }
 
@@ -14,17 +14,6 @@ export default class QuickLRU {
     }
 
     this.maxSize = opts.maxSize
-  }
-
-  _set(key, value) {
-    this.cache[key] = value
-    this._size++
-
-    if (this._size >= this.maxSize) {
-      this._size = 0
-      this.oldCache = this.cache
-      this.cache = {}
-    }
   }
 
   get<T>(key): T | void {
@@ -59,5 +48,16 @@ export default class QuickLRU {
     }
 
     delete this.oldCache[key]
+  }
+
+  private _set(key, value) {
+    this.cache[key] = value
+    this._size++
+
+    if (this._size >= this.maxSize) {
+      this._size = 0
+      this.oldCache = this.cache
+      this.cache = {}
+    }
   }
 }

@@ -2,11 +2,11 @@ export default class QuickLRU {
     maxSize: number;
     cache: {};
     oldCache: {};
-    _size: number;
+    private _size;
     constructor(opts: any);
-    _set(key: any, value: any): void;
     get<T>(key: any): T | void;
     set<T>(key: string, value: T): this;
     has(key: any): boolean;
     delete(key: any): void;
+    private _set(key, value);
 }
