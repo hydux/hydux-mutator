@@ -93,7 +93,7 @@ All these collections can work seamlessly with `setIn/updateIn/getIn/unsetIn` fu
 
 ```ts
 import { setIn } from 'hydux-mutator'
-import ImmuList from 'hydux-mutator/lib/list'
+import ImmuList from 'hydux-mutator/lib/collections/list'
 
 const book = {
   title: 'book1'
