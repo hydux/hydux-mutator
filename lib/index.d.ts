@@ -4,6 +4,7 @@ export declare function setCacheSize(maxSize?: number): void;
 export declare type Key = string | number | symbol;
 export declare type KeyPath = Key[];
 export declare type Accessor<T, V> = ((obj: T) => V) | KeyPath;
+export declare function getPathKeys<T, V>(accessor: Accessor<T, V>, ctx?: KeyPath): KeyPath;
 /**
  * get a deep child
  *

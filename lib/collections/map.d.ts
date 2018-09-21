@@ -17,7 +17,11 @@ export default class ImmuMap<K, V> implements ReadonlyMap<K, V>, IImmutableSetab
     keys(): IterableIterator<K>;
     values(): IterableIterator<V>;
     entries(): IterableIterator<[K, V]>;
-    toJSON(): {
+    toObject(): {
         [key: string]: V;
+    };
+    toJSON(): {
+        class: string;
+        data: [K, V][];
     };
 }

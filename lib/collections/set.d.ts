@@ -12,7 +12,10 @@ export default class ImmuSet<T> implements ReadonlySet<T> {
     keys(): IterableIterator<T>;
     values(): IterableIterator<T>;
     toArray(): T[];
-    toJSON(): T[];
+    toJSON(): {
+        class: string;
+        data: T[];
+    };
     forEach(callbackfn: (value: T, value2: T, set: ReadonlySet<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
 }

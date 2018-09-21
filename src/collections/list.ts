@@ -72,7 +72,10 @@ export default class ImmuList<T> implements IImmutableSetable<number, T, ImmuLis
     return List.toArray(this._list)
   }
   toJSON() {
-    return this.toArray()
+    return {
+      class: '@hydux/ImmuList',
+      data: this.toArray(),
+    }
   }
   concat(...items: (ImmuList<T> | Array<T> | T)[]): ImmuList<T> {
     let list = this._list

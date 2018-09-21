@@ -53,8 +53,11 @@ export default class ImmuSet<T> implements ReadonlySet<T> {
     iter(this.keys(), item => arr.push(item))
     return arr
   }
-  toJSON(): T[] {
-    return this.toArray()
+  toJSON() {
+    return {
+      class: '@hydux/ImmuSet',
+      data: this.toArray(),
+    }
   }
   forEach(callbackfn: (value: T, value2: T, set: ReadonlySet<T>) => void, thisArg?: any): void {
     this._map.forEach((v1, v2, _) => callbackfn(v1, v2, this), thisArg)

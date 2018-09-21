@@ -258,7 +258,7 @@ export default class ImmuMap<K, V> implements ReadonlyMap<K, V>, IImmutableSetab
   entries() {
     return iterTree(this._tree, v => v)
   }
-  toJSON(): { [ key: string ]: V } {
+  toObject() {
     const obj = {} as { [ key: string ]: V }
     iter(this.entries(), ([k, v]) => {
       if (typeof k !== 'string' && typeof k !== 'number') {
@@ -268,5 +268,15 @@ export default class ImmuMap<K, V> implements ReadonlyMap<K, V>, IImmutableSetab
       obj[String(k)] = v
     })
     return obj
+  }
+  toJSON() {
+    const data = [] as [K, V][]
+    iter(this.entries(), ([k, v]) => {
+      data.push([k, v])
+    })
+    return {
+      class: '@hydux/ImmuMap',
+      data: data,
+    }
   }
 }

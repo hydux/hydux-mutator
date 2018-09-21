@@ -10,14 +10,14 @@ const book = {
     ['book1', { title: 'book1' }],
     ['book2', { title: 'book2' }],
     ['book3', { title: 'book3' }],
-  ])
+  ]),
 }
 for (const item of toArray(Array(3).keys())) {
   map = map.set(item, item + 1)
 }
 describe('map', () => {
   it('init', () => {
-    let map2 = new ImmuMap([[0, 1],[1,2],[2,3]])
+    let map2 = new ImmuMap([[0, 1], [1, 2], [2, 3]])
     assert.deepEqual(map2.toJSON(), map.toJSON())
   })
   it('get/set/has', () => {
@@ -34,18 +34,13 @@ describe('map', () => {
   it('keys/values/entries', () => {
     assert.deepEqual(toArray(map.keys()), [0, 1, 2])
     assert.deepEqual(toArray(map.delete(0).keys()), [1, 2])
-    assert.deepEqual(toArray(map.values()), [1,2,3])
-    assert.deepEqual(toArray(map.entries()), [[0,1],[1,2],[2, 3]])
+    assert.deepEqual(toArray(map.values()), [1, 2, 3])
+    assert.deepEqual(toArray(map.entries()), [[0, 1], [1, 2], [2, 3]])
   })
   it('object', () => {
     const [k1, k2, k3, k4] = [{}, {}, {}, {}]
     const [v1, v2, v3, v4] = [{}, {}, {}, {}]
-    let map = new ImmuMap([
-      [k1, v1],
-      [k2, v2],
-      [k3, v3],
-      [k4, v4],
-    ])
+    let map = new ImmuMap([[k1, v1], [k2, v2], [k3, v3], [k4, v4]])
     assert.equal(map.get(k1), v1)
     assert.equal(map.get(k2), v2)
     assert.equal(map.get(k3), v3)
@@ -54,9 +49,8 @@ describe('map', () => {
   })
   it('toJSON', () => {
     assert.deepEqual(map.toJSON(), {
-      '0': 1,
-      '1': 2,
-      '2': 3,
+      class: '@hydux/ImmuMap',
+      data: [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ] ]
     })
   })
   it('size', () => {

@@ -19,7 +19,10 @@ export default class ImmuList<T> implements IImmutableSetable<number, T, ImmuLis
     edit(cb: (list: List.List<T>, ListModule: typeof List) => List.List<T>): ImmuList<T>;
     editWithAny<U>(cb: (list: List.List<T>, ListModule: typeof List) => U): U;
     toArray(): T[];
-    toJSON(): T[];
+    toJSON(): {
+        class: string;
+        data: T[];
+    };
     concat(...items: (ImmuList<T> | Array<T> | T)[]): ImmuList<T>;
     join(separator?: string | undefined): string;
     slice(start?: number | undefined, end?: number | undefined): ImmuList<T>;
