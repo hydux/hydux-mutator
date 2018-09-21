@@ -8,4 +8,4 @@ let state = {
 }
 mutator.setIn(state, _ => _.name, {})
 
-mutator.updateIn(state, _ => _.age, a => ({...a}))
+mutator.updateIn(state, _ => _.age, a => a + 1)

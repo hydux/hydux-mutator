@@ -55,7 +55,7 @@ type PathCache = {
   dynamicKeys: number[],
 }
 
-function getPathKeys<T, V>(accessor: Accessor<T, V>, ctx: KeyPath = []): KeyPath {
+export function getPathKeys<T, V>(accessor: Accessor<T, V>, ctx: KeyPath = []): KeyPath {
   if (!isFn(accessor)) {
     return accessor
   }
