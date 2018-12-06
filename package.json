@@ -20,6 +20,11 @@
   "pre-commit": [
     "test"
   ],
+
+  "files": [
+    "lib",
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hydux/hydux-mutator.git"
